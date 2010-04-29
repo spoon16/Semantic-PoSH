@@ -28,7 +28,7 @@ The file that represents the RDF graph data to initialize the Intellidimension.R
         
         [Parameter(Mandatory = $false, Position = 1)]
         [Alias("f")]
-        [ValidateSet("RDFXML", "TURTLE", "NTRIPLES", "QUADS", "SNAPSHOT")]
+        [ValidateSet("RDFXML", "TURTLE", "NTRIPLES", "NQUADS", "SNAPSHOT")]
         [string] $format = "RDFXML",
         
         [Parameter(Mandatory = $false, Position = 2)]
@@ -102,21 +102,18 @@ function fromStream {
         switch ($format) {
             "NTRIPLES" {
                 $rdfReader = New-Object Intellidimension.Rdf.NTriplesReader @($ds, $options)
-                $readCount = $rdfReader.Parse($streamReader)
              }
             "TURTLE" {
                 $rdfReader = New-Object Intellidimension.Rdf.TurtleReader @($ds, $options)
-                $readCount = $rdfReader.Parse($streamReader)
              }
              "RDFXML" {
                 $rdfReader = New-Object Intellidimension.Rdf.RdfXmlReader @($ds, $options)
-                $readCount = $rdfReader.Parse($streamReader)
              }
              "QUADS" {
                 $rdfReader = New-Object Intellidimension.Rdf.QuadReader @($ds, $options)
-                $readCount = $rdfReader.Parse($streamReader)
              }
         }
+	$readCount = $rdfReader.Parse($streamReader)
         Write-Debug "$readCount statements read"
     }
     finally {
