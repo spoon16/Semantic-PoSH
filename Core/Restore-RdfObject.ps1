@@ -1,8 +1,4 @@
 function Restore-RdfObject {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 9ec4aac... Restore-RdfObject documentation added
 <#
 .Synopsis
 Deserialize an RDF object from a DataSource
@@ -28,17 +24,7 @@ Optional parameter that can be used to define the context the object should be d
 	History:
 		v0.1 - deserializes an RDF object
 #>
-<<<<<<< HEAD
-<<<<<<< HEAD
 	[CmdletBinding()]
-=======
->>>>>>> 5b3d3cc... implemented Restore-RdfObject functionality
-=======
-	[CmdletBinding]
->>>>>>> 9ec4aac... Restore-RdfObject documentation added
-=======
-	[CmdletBinding()]
->>>>>>> 2113d06... Fixed bugs in Restore-RdfObject (syntax) and added Restore-RdfObject to module exports
 	param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[Alias("ds")]
@@ -55,28 +41,21 @@ Optional parameter that can be used to define the context the object should be d
 #	begin {
 #	}
 	process {
-<<<<<<< HEAD
-<<<<<<< HEAD
-		if ($context -ne $null) {
-			$ds = New-Object Intellidimension.Rdf.InMemoryGraph 3
-			$ds.Add($dataSource.GetStatements($context, $null, $null, $null))
-=======
-		if ($context -neq $null) {
-			$ds = New-Object Intellidimension.Rdf.InMemoryGraph 3
-			$ds.Add($dataSource.GetStatements($context, $null, $null, $null)
->>>>>>> 5b3d3cc... implemented Restore-RdfObject functionality
-=======
-		if ($context -ne $null) {
-			$ds = New-Object Intellidimension.Rdf.InMemoryGraph 3
-			$ds.Add($dataSource.GetStatements($context, $null, $null, $null))
->>>>>>> 2113d06... Fixed bugs in Restore-RdfObject (syntax) and added Restore-RdfObject to module exports
-		}
-		else {
-			$ds = $dataSource
-		}
+		try {
+			if ($context -ne $null) {
+				$ds = New-Object Intellidimension.Rdf.InMemoryGraph 3
+				$ds.Add($dataSource.GetStatements($context, $null, $null, $null))
+			}
+			else {
+				$ds = $dataSource
+			}
 
-		$serializer = New-Object Intellidimension.Rdf.RdfSerializer $ds
-		$serializer.Deserialize($uri)
+			$serializer = New-Object Intellidimension.Rdf.RdfSerializer $ds
+			$serializer.Deserialize($uri)
+		}
+		catch [System.InvalidOperationException] {
+			Write-Error "Unable to deserialize object with URI: $uri"
+		}
 	}
 #	end {
 #	}
