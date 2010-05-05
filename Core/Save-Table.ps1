@@ -45,38 +45,45 @@ Save-Table -table $tbl -file .\TEMP.wt -format WIRETABLE
 #	begin {
 #	}
 	process {
-		if ($table -is [Intellidimension.Rdf.Table] -or $table -is [Intellidimension.Rdf.WireTable]) {
-			if ($file -ne $null) {
-				Write-Debug ("Saving table to: " + $file.FullName)
-				$stream = $file.Create()
+		try {
+			if ($table -is [Intellidimension.Rdf.Table] -or $table -is [Intellidimension.Rdf.WireTable]) {
+				if ($file -ne $null) {
+					Write-Debug ("Saving table to: " + $file.FullName)
+					$stream = $file.Create()
+				}
+				else {
+					$stream = New-Object IO.MemoryStream
+				}
+
+				switch ($format.ToUpperInvariant()) {
+					"SPARQLXML" {
+						$textWriter = New-Object IO.StreamWriter $stream
+
+						$table = [Intellidimension.Rdf.Table] $table
+						$formatter = New-Object Intellidimension.Sparql.SparqlXmlFormatter @($table, [Intellidimension.Sparql.CommandSelect])
+						$formatter.Write($textWriter)
+					}
+					"WIRETABLE" {
+						$table = [Intellidimension.Rdf.WireTable] $table
+						$table.Save($stream)
+					}
+				}
+
+				if ($stream -isnot [IO.FileStream]) {
+					$stream.ToArray()
+				}
+				
+				$stream.Close()
+				$stream.Dispose()
 			}
 			else {
-				$stream = New-Object IO.MemoryStream
+				Write-Error "`$table must be of type Intellidimension.Rdf.Table or Intellidimension.Rdf.WireTable"
 			}
-
-			switch ($format.ToUpperInvariant()) {
-				"SPARQLXML" {
-					$textWriter = New-Object IO.StreamWriter $stream
-
-					$table = [Intellidimension.Rdf.Table] $table
-					$formatter = New-Object Intellidimension.Sparql.SparqlXmlFormatter @($table, [Intellidimension.Sparql.CommandSelect])
-					$formatter.Write($textWriter)
-				}
-				"WIRETABLE" {
-					$table = [Intellidimension.Rdf.WireTable] $table
-					$table.Save($stream)
-				}
-			}
-
-			if ($stream -isnot [IO.FileStream]) {
-				$stream.ToArray()
-			}
-			
-			$stream.Close()
-			$stream.Dispose()
 		}
-		else {
-			Write-Error "`$table must be of type Intellidimension.Rdf.Table or Intellidimension.Rdf.WireTable"
+		catch [Exception] {
+			Write-Error -Exception $_.Exception
+		}
+		finally {
 		}
 	}
 #	end {

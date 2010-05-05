@@ -45,29 +45,35 @@ $tbl = Restore-Table -stream $s -format WIRETABLE
 #	begin {
 #	}
 	process {
-		switch ($PsCmdlet.ParameterSetName) {
-			"FromFile_ParamSet" {
-				$targetStream = $file.OpenRead()
+		try {
+			switch ($PsCmdlet.ParameterSetName) {
+				"FromFile_ParamSet" {
+					$targetStream = $file.OpenRead()
+				}
+				"FromStream_ParamSet" {
+					$targetStream = $stream
+				}
 			}
-			"FromStream_ParamSet" {
-				$targetStream = $stream
-			}
-		}
 	
-		switch ($format.ToUpperInvariant()) {
-			"SPARQLXML" {
-				$reader = New-Object IO.StreamReader $targetStream
-				$tbl = [Intellidimension.Sparql.SparqlXmlReader]::Parse($reader)
-			}
-			"WIRETABLE" {
-				$tbl = New-Object Intellidimension.Rdf.WireTable
-				$tbl.Load($targetStream)
+			switch ($format.ToUpperInvariant()) {
+				"SPARQLXML" {
+					$reader = New-Object IO.StreamReader $targetStream
+					$tbl = [Intellidimension.Sparql.SparqlXmlReader]::Parse($reader)
+				}
+				"WIRETABLE" {
+					$tbl = New-Object Intellidimension.Rdf.WireTable
+					$tbl.Load($targetStream)
+				}
 			}
 		}
-
-		if ($PsCmdlet.ParameterSetName) {
-			$targetStream.Close()
-			$targetStream.Dispose()
+		catch [Exception] {
+			Write-Error -Exception $_.Exception
+		}
+		finally {
+			if ($PsCmdlet.ParameterSetName -eq "FromFile_ParamSet" -and $targetStream -ne $null) {
+				$targetStream.Close()
+				$targetStream.Dispose()
+			}
 		}
 
 		$tbl
