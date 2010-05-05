@@ -11,7 +11,8 @@ loadPrerequisiteAssembly "RdfCore" (Get-Item ./bin/RdfCore.dll)
 . ./Core/Save-DataSource.ps1
 . ./Core/New-Table.ps1
 . ./Core/New-TableRow.ps1
+. ./Core/Save-Table.ps1
 
 Pop-Location
 
-Export-ModuleMember -Function @('New-DataSource', 'ConvertTo-RdfValue', 'Restore-RdfObject', 'Save-DataSource', 'New-Table', 'New-TableRow')
+Export-ModuleMember -Function @('New-DataSource', 'ConvertTo-RdfValue', 'Restore-RdfObject', 'Save-DataSource', 'New-Table', 'New-TableRow', 'Save-Table')
