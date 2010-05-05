@@ -1,4 +1,33 @@
 function Save-Table {
+<#
+.Synopsis
+Save a Table instance
+
+.Description
+Saves an instance of Intellidimension.Rdf.Table or Intellidimension.Rdf.WireTable to a file or out to the pipeline as a byte array
+
+.Parameter table
+The table to save
+
+.Parameter file
+The target file to create and write the table contents to
+
+.Parameter format
+The format of the output, either SPARQLXML or WIRETABLE
+
+.Example
+SIMPLE
+-------------------
+Save-Table -table $tbl #outputs a byte array to the pipeline
+
+TO FILE
+-------------------
+Save-Table -table $tbl -file .\TEMP.sparqlres
+
+WITH FORMAT
+-------------------
+Save-Table -table $tbl -file .\TEMP.wt -format WIRETABLE
+#>
 	[CmdletBinding()]
 	param(
 		[Parameter(Mandatory = $true, Position = 0)]

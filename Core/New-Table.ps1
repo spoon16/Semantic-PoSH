@@ -7,12 +7,29 @@ Create a new Table object
 Creates a new Intellidimension.Rdf.Table instance with the specified column count and column names, can optionally be initialized with a set of table rows passed via the pipeline
 
 .Parameter columnCount
+The number of columns the new table should have
 
 .Parameter columnNames
+An array that contains the column names that should be assigned to each column in the table
 
-.Parameter row
+.Parameter rows
+Rows that the table should be initialized with
 
 .Example
+SIMPLE
+----------------------------
+$tbl = New-Table 5
+
+WITH COLUMN NAMES
+----------------------------
+$tbl = New-Table 5 -names @("first", "second", "third", "fourth", "fifth")
+
+WITH ROWS
+----------------------------
+$tbl = New-Table 5 $rows
+
+WITH ROWS FROM PIPELINE
+----------------------------
 $tbl = ($rows | New-Table 5)
 #>
 	[CmdletBinding()]

@@ -14,6 +14,19 @@ The source table the new row should use as a template
 
 .Parameter cells
 The values that the new row should be initialized with
+
+.Example
+SIMPLE
+-------------------------
+$tr = New-TableRow 5
+
+FROM TABLE
+-------------------------
+$tr = New-TableRow -table $tbl
+
+WITH VALUES
+-------------------------
+$tr = New-TableRow 5 @($rdfVal1, $rdfVal2, $rdfVal3, $rdfVal4, (ConvertTo-RdfValue "<test#uri>")
 #>
 	[CmdletBinding(DefaultParameterSetName = "FromInt_ParamSet")]
 	param (
@@ -21,11 +34,11 @@ The values that the new row should be initialized with
 		[Alias("count")]
 		[int] $cellCount,
 
-		[Parameter(Mandatory = $true, Position = 0, ParameterSetName = "FromTable_ParamSet")]
+		[Parameter(Mandatory = $true, ParameterSetName = "FromTable_ParamSet")]
 		[Alias("tbl", "t")]
 		[Intellidimension.Rdf.Table] $table,
 
-		[Parameter(Mandatory = $true, Position = 1)]
+		[Parameter(Mandatory = $false, Position = 1)]
 		[Intellidimension.Rdf.RdfValue[]] $cells
 	)
 #	begin {
@@ -37,12 +50,16 @@ The values that the new row should be initialized with
 			}
 			"FromInt_ParamSet" {
 				$row = New-Object Intellidimension.Rdf.TableRow $cellCount
-				for ($i = 0; $i -lt $row.Count -and $i -lt $cells.Length; $i ++) {
-					$v = $cells[$i]
-					$row.Cells[$i] = $cells[$i]
-				}
 			}
 		}
+
+		if ($cells -ne $null) {
+			for ($i = 0; $i -lt $row.Count -and $i -lt $cells.Length; $i ++) {
+				$v = $cells[$i]
+				$row.Cells[$i] = $cells[$i]
+			}
+		}
+
 		, $row
 	}
 #	end {
