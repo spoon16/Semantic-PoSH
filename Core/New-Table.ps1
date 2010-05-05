@@ -26,7 +26,7 @@ $tbl = ($rows | New-Table 5)
 		[string[]] $columnNames,
 
 		[Parameter(Mandatory = $false, Position = 1, ValueFromPipeline = $true)]
-		$rows
+		[Intellidimension.Rdf.TableRow[]] $rows
 	)
 	begin {
 		$tbl = New-Object Intellidimension.Rdf.Table $columnCount
