@@ -19,17 +19,9 @@ function loadPrerequisiteAssembly {
 loadPrerequisiteAssembly "PowerCollections" (Get-Item ./bin/PowerCollections.dll)
 loadPrerequisiteAssembly "RdfCore" (Get-Item ./bin/RdfCore.dll)
 
-. ./Core/New-DataSource.ps1
-. ./Core/ConvertTo-RdfValue.ps1
-. ./Core/Restore-RdfObject.ps1
-. ./Core/Save-DataSource.ps1
-. ./Core/New-Table.ps1
-. ./Core/New-TableRow.ps1
-. ./Core/Save-Table.ps1
-. ./Core/Restore-Table.ps1
-. ./Core/New-Statement.ps1
-. ./Core/New-RdfLiteral.ps1
-. ./Core/New-RdfUri.ps1
+gci -Path ./Rdf -Filter *.ps1 | %{ . $_.FullName }
+gci -Path ./Sparql -Filter *.ps1 | %{ . $_.FullName }
+gci -Path ./Model -Filter *.ps1 | %{ . $_.FullName }
 
 Pop-Location
 
