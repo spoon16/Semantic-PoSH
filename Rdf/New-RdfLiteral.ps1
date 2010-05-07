@@ -51,15 +51,19 @@ $ltrl = New-RdfLiteral test -language en
 
 		[Parameter(Mandatory = $false, Position = 2)]
 		[Alias("l", "lang")]
-		[string] $language
+		[string] $language = $null
 	)
 	begin {
+		$typeUri = $null
+
 		switch ($PsCmdlet.ParameterSetName) {
 			"Any_ParamSet" {
 				$typeUri = $type
 			}
 			"Xsd_ParamSet" {
-				$typeUri = ([Intellidimension.Rdf.NS]::Xsd + $xsdType)
+				if ([string]::IsNullOrEmpty($xsdType) -ne $true) {
+					$typeUri = ([Intellidimension.Rdf.NS]::Xsd + $xsdType)
+				}
 			}
 		}
 	}

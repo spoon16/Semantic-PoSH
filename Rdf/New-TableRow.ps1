@@ -47,16 +47,12 @@ $tr = New-TableRow 5 @($rdfVal1, $rdfVal2, $rdfVal3, $rdfVal4, (ConvertTo-RdfVal
 		switch ($PsCmdlet.ParameterSetName) {
 			"FromTable_ParamSet" {
 				$row = $table.NewRow($cells)
+				initializeCellValues $cells $row
+				$table.AddRow($row)
 			}
 			"FromInt_ParamSet" {
 				$row = New-Object Intellidimension.Rdf.TableRow $cellCount
-			}
-		}
-
-		if ($cells -ne $null) {
-			for ($i = 0; $i -lt $row.Count -and $i -lt $cells.Length; $i ++) {
-				$v = $cells[$i]
-				$row.Cells[$i] = $cells[$i]
+				initializeCellValues $cells $row
 			}
 		}
 
@@ -64,4 +60,19 @@ $tr = New-TableRow 5 @($rdfVal1, $rdfVal2, $rdfVal3, $rdfVal4, (ConvertTo-RdfVal
 	}
 #	end {
 #	}
+}
+
+function initializeCellValues {
+	param (
+		[Intellidimension.Rdf.RdfValue[]] $cells,
+		[Intellidimension.Rdf.TableRow] $row
+	)
+
+	
+	if ($cells -ne $null) {
+		for ($i = 0; $i -lt $row.Count -and $i -lt $cells.Length; $i ++) {
+			$v = $cells[$i]
+			$row.Cells[$i] = $cells[$i]
+		}
+	}
 }

@@ -54,8 +54,10 @@ $tbl = ($rows | New-Table 5)
 		}
 	}
 	process {
-		foreach ($row in $rows) {
-			$tbl.AddRow($row) | Out-Null
+		if($rows -ne $null) {
+			foreach ($row in $rows) {
+				$tbl.AddRow($row) | Out-Null
+			}
 		}
 	}
 	end {

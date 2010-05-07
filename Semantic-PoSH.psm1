@@ -33,4 +33,4 @@ loadPrerequisiteAssembly "RdfCore" (Get-Item ./bin/RdfCore.dll)
 
 Pop-Location
 
-Export-ModuleMember -Function @('New-DataSource', 'ConvertTo-RdfValue', 'New-RdfLiteral', 'New-RdfUri', 'Restore-RdfObject', 'Save-DataSource', 'New-Table', 'New-TableRow', 'Save-Table', 'Restore-Table',  'New-Statement')
+Export-ModuleMember -Function @('New-DataSource', 'ConvertTo-RdfValue', 'New-RdfLiteral', 'New-RdfUri', 'Restore-RdfObject', 'Save-DataSource', 'New-Table', 'New-TableRow', 'Save-Table', 'Restore-Table',  'New-Statement', 'New-ClientModel')
